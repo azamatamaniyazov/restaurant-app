@@ -1,0 +1,19 @@
+.events-block {
+  padding: 100px 0;
+  background-color: #fee2b3;
+}
+
+.event-img {
+  padding: 0 20px;
+  margin-bottom: 30px;
+  height: 350px;
+}
+
+.event-info {
+  padding: 0 20px;
+}
+
+.event-info .price {
+  font-size: 30px;
+  font-family: "Playfair Display", serif;
+}

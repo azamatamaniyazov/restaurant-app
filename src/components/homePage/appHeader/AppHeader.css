@@ -1,0 +1,27 @@
+.app-header {
+  position: relative;
+  color: #fff;
+  height: 100vh;
+  background-image: url(https://b.zmtcdn.com/mx-onboarding-hero87f77501659a5656cad54d98e72bf0d81627911821.webp);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.intro {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.intro-title {
+  font-size: 70px;
+  margin-bottom: 20px;
+}
+
+.intro span {
+  font-size: 12px;
+  text-transform: uppercase;
+}

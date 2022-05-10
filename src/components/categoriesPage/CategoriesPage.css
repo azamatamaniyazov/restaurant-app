@@ -1,0 +1,21 @@
+.category-item {
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.category-item__img {
+  border-radius: 7px;
+}
+
+.category-item__desc {
+  position: absolute;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  z-index: 1;
+  bottom: 0;
+  width: 100%;
+  background: rgba(19, 29, 38, 0.7);
+  text-align: center;
+  color: #f9efc5;
+}

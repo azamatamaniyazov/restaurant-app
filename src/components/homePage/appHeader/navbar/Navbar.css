@@ -1,0 +1,40 @@
+.navbar {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+  z-index: 8;
+}
+
+.nav-item {
+  padding: 15px;
+}
+
+.nav-item__link:hover {
+  color: #ff5200;
+}
+
+.cart {
+  height: fit-content;
+  padding: 10px;
+  position: relative;
+}
+
+.cart:hover {
+  color: #ff5200;
+}
+
+.cart-icon {
+  margin-left: 5px;
+  color: #ff5200;
+}
+
+.cart-counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 12px;
+  padding: 0 5px;
+  border-radius: 50px;
+}
