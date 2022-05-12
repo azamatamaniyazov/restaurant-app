@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { Col } from "react-bootstrap";
 
 function ProductItem({
-  getActiveId,
+  getBasketItemId,
   id,
   category_id,
   product_name,
@@ -10,10 +10,7 @@ function ProductItem({
   price,
   images,
 }) {
-  useEffect(() => {
-    getActiveId(category_id);
-  }, [category_id]);
-
+  const [btnState, setBtnState] = useState(false);
   return (
     <Col lg="4">
       <div className="products-item scale">
@@ -25,7 +22,14 @@ function ProductItem({
             <span>
               Price: <span className="price">{price}</span>
             </span>
-            <button>
+            <button
+              onClick={() => {
+                setBtnState(true);
+                getBasketItemId(id);
+              }}
+              className={btnState ? "active-class" : ""}
+              disabled={btnState}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

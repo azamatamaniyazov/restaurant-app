@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { Breadcrumb, BreadcrumbItem, Col, Row } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import useServices from "../../services/Services";
-import setContent from "../../utils/setContent";
 import CategoriesBlock from "./categoriesBlock/CategoriesBlock";
 import "./CategoriesPage.css";
 import ProductsBlock from "./productsBlock/ProductsBlock";
 
-function CategoriesPage() {
+function CategoriesPage({ getBasketItemId }) {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Recently added");
   const [selectedId, setSelectedId] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
   const [activeId, setActiveId] = useState();
 
   const { getCategories, status, setStatus } = useServices();
@@ -20,46 +19,32 @@ function CategoriesPage() {
       .then(() => setStatus("confirmed"));
   }, []);
 
-  const getSelectedCategory = (name, id) => {
-    setSelectedCategory(name);
+  const getSelectedCategory = (id, name) => {
     setSelectedId(id);
+    setSelectedCategory(name);
   };
 
   const getActiveId = (id) => {
     setActiveId(id);
   };
 
-  const Blocks = () => {
-    return (
-      <>
-        <Col lg="3">
-          <CategoriesBlock
-            getSelectedCategory={getSelectedCategory}
-            categories={categories}
-            activeId={activeId}
-          />
-        </Col>
-        <Col lg="9">
-          <ProductsBlock
-            getActiveId={getActiveId}
-            selectedCategory={selectedCategory}
-            selectedId={selectedId}
-          />
-        </Col>
-      </>
-    );
-  };
-
   return (
     <div className="categories-page">
-      <Breadcrumb>
-        <BreadcrumbItem href="#">Home</BreadcrumbItem>
-        <BreadcrumbItem href="#">Menu</BreadcrumbItem>
-        <BreadcrumbItem active>{selectedCategory}</BreadcrumbItem>
-      </Breadcrumb>
-      <Row className="justify-content-between">
-        {setContent(status, Blocks)}
-      </Row>
+      <Container>
+        <Row className="justify-content-between">
+          <CategoriesBlock
+            categories={categories}
+            getSelectedCategory={getSelectedCategory}
+            activeId={activeId}
+          />
+          <ProductsBlock
+            selectedId={selectedId}
+            selectedCategory={selectedCategory}
+            getActiveId={getActiveId}
+            getBasketItemId={getBasketItemId}
+          />
+        </Row>
+      </Container>
     </div>
   );
 }

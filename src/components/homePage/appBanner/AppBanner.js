@@ -1,11 +1,9 @@
-import Navbar from "./navbar/Navbar";
-import "./AppHeader.css";
+import "./AppBanner.css";
 import { Col, Container, Row } from "react-bootstrap";
 
-function AppHeader() {
+function AppBanner() {
   return (
-    <div className="app-header">
-      <Navbar />
+    <div className="app-banner">
       <div className="intro">
         <Container>
           <Row>
@@ -26,4 +24,4 @@ function AppHeader() {
   );
 }
 
-export default AppHeader;
+export default AppBanner;

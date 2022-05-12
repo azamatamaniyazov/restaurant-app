@@ -4,40 +4,54 @@ import useServices from "../../../services/Services";
 import ProductItem from "./productItem/ProductItem";
 import "./ProductsBlock.css";
 
-function ProductsBlock({ getActiveId, selectedCategory, selectedId }) {
-  const [products, setProducts] = useState();
-  const [transition, setTransition] = useState(false);
+function ProductsBlock({
+  selectedId,
+  selectedCategory,
+  getActiveId,
+  getBasketItemId,
+}) {
+  const [products, setProducts] = useState({});
   const { getProducts, getRecentProducts, status, setStatus } = useServices();
 
   useEffect(() => {
     selectedId
       ? getProducts(selectedId)
-          .then((data) => setProducts(data))
+          .then((data) => {
+            setProducts(data);
+            getActiveId(data.category_id);
+          })
           .then(() => {
             setStatus("confirmed");
-            setTransition(true);
           })
       : getRecentProducts()
           .then((data) => setProducts(data))
           .then(() => {
             setStatus("confirmed");
-            setTransition(true);
           });
-  }, []);
+  }, [selectedId]);
 
-  const productsItems = products
-    ? products.map((item) => {
+  const productsItems = products.products
+    ? products.products.map((item) => {
         return (
-          <ProductItem key={item.id} {...item} getActiveId={getActiveId} />
+          <ProductItem
+            key={item.id}
+            {...item}
+            getBasketItemId={getBasketItemId}
+          />
         );
       })
     : null;
-
   return (
-    <div className="products-block">
-      <h3 className="mb-4 text-center">{selectedCategory}</h3>
-      <Row>{productsItems}</Row>
-    </div>
+    <Col lg="9">
+      <div className="products-block">
+        <h3 className="mb-4 text-center">
+          {selectedId && !products.category_name
+            ? selectedCategory
+            : products.category_name}
+        </h3>
+        <Row>{productsItems}</Row>
+      </div>
+    </Col>
   );
 }
 
