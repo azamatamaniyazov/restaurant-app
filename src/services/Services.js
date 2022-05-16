@@ -25,19 +25,11 @@ const useServices = () => {
   };
 
   const _transformProducts = (data, id) => {
-    const newArray = data.filter((item) => item.category_id === id);
-    return {
-      category_id: newArray[0].category_id,
-      products: newArray,
-    };
+    return data.filter((item) => item.category_id === id);
   };
 
   const _transformRecentProducts = (data) => {
-    const newArray = data.slice(-3);
-    return {
-      category_name: "Недавно добавленный",
-      products: newArray,
-    };
+    return data.slice(-3);
   };
 
   return {

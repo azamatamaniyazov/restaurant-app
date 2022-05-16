@@ -1,55 +1,68 @@
 import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import {
+  productsFetched,
+  productsFetching,
+  productsFetchingError,
+} from "../../../actions";
 import useServices from "../../../services/Services";
 import ProductItem from "./productItem/ProductItem";
 import "./ProductsBlock.css";
 
-function ProductsBlock({
-  selectedId,
-  selectedCategory,
-  getActiveId,
-  getBasketItemId,
-}) {
-  const [products, setProducts] = useState({});
-  const { getProducts, getRecentProducts, status, setStatus } = useServices();
+function ProductsBlock() {
+  const { products, productsLoadingStatus, activeCategoryId } = useSelector(
+    (state) => state
+  );
+  const dispatch = useDispatch();
+  const { getProducts, getRecentProducts } = useServices();
 
   useEffect(() => {
-    selectedId
-      ? getProducts(selectedId)
-          .then((data) => {
-            setProducts(data);
-            getActiveId(data.category_id);
-          })
-          .then(() => {
-            setStatus("confirmed");
-          })
-      : getRecentProducts()
-          .then((data) => setProducts(data))
-          .then(() => {
-            setStatus("confirmed");
-          });
-  }, [selectedId]);
+    productsLoader();
+  }, [activeCategoryId]);
 
-  const productsItems = products.products
-    ? products.products.map((item) => {
-        return (
-          <ProductItem
-            key={item.id}
-            {...item}
-            getBasketItemId={getBasketItemId}
-          />
-        );
-      })
-    : null;
+  const productsLoader = () => {
+    dispatch(productsFetching());
+    activeCategoryId
+      ? getProducts(activeCategoryId)
+          .then((data) => dispatch(productsFetched(data)))
+          .catch(() => dispatch(productsFetchingError()))
+      : getRecentProducts()
+          .then((data) => dispatch(productsFetched(data)))
+          .catch(() => dispatch(productsFetchingError()));
+  };
+
+  const renderProductItems = (products) => {
+    if (products.length === 0) {
+      return (
+        <p className="text-center my-4">В настоящее время это меню пусто</p>
+      );
+    }
+
+    return products.map((item) => {
+      return (
+        <CSSTransition
+          in={true}
+          key={item.id}
+          timeout={500}
+          classNames="my-node"
+        >
+          <ProductItem {...item} />
+        </CSSTransition>
+      );
+    });
+  };
+
+  const productsItems = renderProductItems(products);
   return (
     <Col lg="9">
       <div className="products-block">
-        <h3 className="mb-4 text-center">
-          {selectedId && !products.category_name
-            ? selectedCategory
-            : products.category_name}
-        </h3>
-        <Row>{productsItems}</Row>
+        <TransitionGroup>
+          <Row>
+            {productsLoadingStatus === "loading" ? "Loading" : productsItems}
+          </Row>
+        </TransitionGroup>
       </div>
     </Col>
   );

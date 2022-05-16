@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import BasketItem from "./BasketItem";
 import "./BasketPage.css";
 
-function BasketPage({ basketProducts }) {
-  console.log(basketProducts);
+function BasketPage() {
+  const { basketProducts } = useSelector((state) => state);
 
-  const basketItems = basketProducts.map((item) => {
-    return <BasketItem key={item.id} {...item} />;
+  const basketItems = basketProducts.map((item, index) => {
+    return <BasketItem key={item.id} {...item} index={index} />;
   });
+
   return (
     <div className="my-menu">
       <Container>

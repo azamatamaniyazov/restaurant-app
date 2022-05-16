@@ -1,29 +1,45 @@
 import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBasketProduct } from "../../actions";
 
-const BasketItem = ({ id }) => {
+const BasketItem = ({ id, product_name, price, index }) => {
+  const { basketProducts } = useSelector((state) => state);
   const [amount, setAmount] = useState(1);
+  const dispatch = useDispatch();
   const inputRef = useRef(1);
 
   useEffect(() => {
-    onChangeInput();
+    amountHandler();
   }, []);
 
-  const onChangeInput = () => {
-    const sum = inputRef.current.value * 5;
-    setAmount(sum);
+  const amountHandler = () => {
+    setAmount(inputRef.current.value * price);
   };
+
+  const removeBasketProduct = (id) => {
+    const updatedBasketProducts = basketProducts.filter(
+      (item) => item.id !== id
+    );
+    dispatch(deleteBasketProduct(updatedBasketProducts));
+    localStorage.setItem(
+      "basketProducts",
+      JSON.stringify(updatedBasketProducts)
+    );
+  };
+
   return (
     <tbody>
       <tr>
-        <th scope="row">1</th>
-        <td>Ассорти из вегетарианских салатов</td>
-        <td className="text-center">$5</td>
+        <th scope="row">{index + 1}</th>
+        <td>{product_name}</td>
+        <td className="text-center">{price}</td>
         <td>
           <input
             className="form-control text-center p-1"
             type="number"
             defaultValue={1}
-            onChange={onChangeInput}
+            min={1}
+            onChange={amountHandler}
             ref={inputRef}
           />
         </td>
@@ -34,10 +50,15 @@ const BasketItem = ({ id }) => {
             value={amount}
             readOnly
           />
-          {/* <p className="text-center">{amount}</p> */}
         </td>
         <td className="text-center">
-          <button className="delete border-0 bg-transparent" type="button">
+          <button
+            className="delete border-0 bg-transparent"
+            type="button"
+            onClick={() => {
+              removeBasketProduct(id);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
