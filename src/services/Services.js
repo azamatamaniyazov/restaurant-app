@@ -1,7 +1,7 @@
 import { useHttp } from "../hooks/http.hook";
 
 const useServices = () => {
-  const { request, status, setStatus, clearError } = useHttp();
+  const { request } = useHttp();
   const _baseUrl = "http://restaurant.my-project.site/api";
 
   const getCategories = async () => {
@@ -24,6 +24,10 @@ const useServices = () => {
     return await request(`${_baseUrl}/product/${id}`);
   };
 
+  const getEvents = async () => {
+    return await request(`${_baseUrl}/event`);
+  };
+
   const _transformProducts = (data, id) => {
     return data.filter((item) => item.category_id === id);
   };
@@ -37,9 +41,7 @@ const useServices = () => {
     getProducts,
     getRecentProducts,
     getProduct,
-    status,
-    setStatus,
-    clearError,
+    getEvents,
   };
 };
 

@@ -1,8 +1,13 @@
 import { Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
+  const { basketProducts } = useSelector((state) => state);
+
+  const counter = basketProducts.length;
+
   const activeClass = ({ isActive }) => {
     return "nav-item__link" + (isActive ? " active-class" : "");
   };
@@ -26,9 +31,9 @@ function Navbar() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-item__link" href="./booking">
+              <NavLink className={activeClass} to="/booking">
                 Booking
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
               <a className="nav-item__link" href="./location">
@@ -52,7 +57,7 @@ function Navbar() {
                   <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
                 </svg>
               </span>
-              <span className="cart-counter">0</span>
+              <span className="cart-counter">{counter}</span>
             </div>
           </NavLink>
 

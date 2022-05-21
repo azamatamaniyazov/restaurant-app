@@ -8,6 +8,10 @@ const initialState = {
   productsLoadingStatus: "idle",
   basketProducts: localState ? JSON.parse(localState) : [],
   basketProductsLoadingStatus: "idle",
+  orderProducts: [],
+  totalPrice: 0,
+  events: [],
+  eventsLoadingStatus: "idle",
 };
 
 const reducer = (state = initialState, action) => {
@@ -69,6 +73,32 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         basketProducts: action.payload,
+      };
+    case "SET_ORDER_PRODUCTS":
+      return {
+        ...state,
+        orderProducts: action.payload,
+      };
+    case "CHANGE_TOTAL_PRICE":
+      return {
+        ...state,
+        totalPrice: action.payload,
+      };
+    case "EVENTS_FETCHING":
+      return {
+        ...state,
+        eventsLoadingStatus: "loading",
+      };
+    case "EVENTS_FETCHED":
+      return {
+        ...state,
+        events: action.payload,
+        eventsLoadingStatus: "idle",
+      };
+    case "EVENTS_FETCHING_ERROR":
+      return {
+        ...state,
+        eventsLoadingStatus: "error",
       };
     default:
       return state;

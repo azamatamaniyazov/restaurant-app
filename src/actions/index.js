@@ -62,9 +62,42 @@ export const basketProductFetchingError = () => {
   };
 };
 
-export const deleteBasketProduct = (id) => {
+export const deleteBasketProduct = (products) => {
   return {
     type: "DELETE_BASKET_PRODUCT",
-    payload: id,
+    payload: products,
+  };
+};
+
+export const setOrderProducts = (products) => {
+  return {
+    type: "SET_ORDER_PRODUCTS",
+    payload: products,
+  };
+};
+
+export const changeTotalPrice = (total) => {
+  return {
+    type: "CHANGE_TOTAL_PRICE",
+    payload: total,
+  };
+};
+
+export const eventsFetching = () => {
+  return {
+    type: "EVENTS_FETCHING",
+  };
+};
+
+export const eventsFetched = (products) => {
+  return {
+    type: "EVENTS_FETCHED",
+    payload: products,
+  };
+};
+
+export const eventsFetchingError = () => {
+  return {
+    type: "EVENTS_FETCHING_ERROR",
   };
 };

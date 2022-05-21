@@ -1,19 +1,49 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteBasketProduct } from "../../actions";
+import {
+  changeTotalPrice,
+  deleteBasketProduct,
+  setOrderProducts,
+} from "../../actions";
 
-const BasketItem = ({ id, product_name, price, index }) => {
-  const { basketProducts } = useSelector((state) => state);
-  const [amount, setAmount] = useState(1);
+const BasketItem = ({ id, category_name, product_name, price, index }) => {
+  const { basketProducts, orderProducts } = useSelector((state) => state);
+  // const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const inputRef = useRef(1);
 
+  const totalPrice = orderProducts.reduce((prev, curr) => {
+    return prev + curr.price;
+  }, 0);
+
   useEffect(() => {
     amountHandler();
-  }, []);
+    dispatch(changeTotalPrice(totalPrice));
+    console.log("render");
+  }, [totalPrice]);
 
   const amountHandler = () => {
-    setAmount(inputRef.current.value * price);
+    const newArray = orderProducts.filter((item) => item.product_id !== id);
+    const newObj = {
+      product_id: id,
+      product_name,
+      count: inputRef.current.value,
+      price: inputRef.current.value * price,
+    };
+
+    newArray.push(newObj);
+    dispatch(setOrderProducts(newArray));
+    localStorage.setItem(
+      `key_${id}`,
+      JSON.stringify({
+        count: inputRef.current.value,
+        amountPrice: inputRef.current.value * price,
+      })
+    );
+  };
+
+  const getLocalStorage = (id) => {
+    return JSON.parse(localStorage.getItem(`key_${id}`));
   };
 
   const removeBasketProduct = (id) => {
@@ -25,19 +55,27 @@ const BasketItem = ({ id, product_name, price, index }) => {
       "basketProducts",
       JSON.stringify(updatedBasketProducts)
     );
+
+    const updatedOrderProducts = orderProducts.filter(
+      (item) => item.product_id !== id
+    );
+    dispatch(setOrderProducts(updatedOrderProducts));
+    localStorage.removeItem(`key_${id}`);
   };
 
   return (
     <tbody>
       <tr>
         <th scope="row">{index + 1}</th>
-        <td>{product_name}</td>
+        <td>
+          {product_name} <small>({category_name})</small>
+        </td>
         <td className="text-center">{price}</td>
         <td>
           <input
             className="form-control text-center p-1"
             type="number"
-            defaultValue={1}
+            defaultValue={getLocalStorage(id) ? +getLocalStorage(id).count : 1}
             min={1}
             onChange={amountHandler}
             ref={inputRef}
@@ -47,7 +85,11 @@ const BasketItem = ({ id, product_name, price, index }) => {
           <input
             className="form-control text-center border-0 bg-transparent"
             type="text"
-            value={amount}
+            value={
+              getLocalStorage(id)
+                ? +getLocalStorage(id).amountPrice
+                : +inputRef.current.value * price
+            }
             readOnly
           />
         </td>

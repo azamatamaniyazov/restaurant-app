@@ -2,6 +2,12 @@
   padding: 120px 0;
 }
 
+.table {
+  height: 250px;
+  overflow-y: scroll;
+  padding: 0 20px;
+}
+
 .basket-item-enter {
   opacity: 0;
 }

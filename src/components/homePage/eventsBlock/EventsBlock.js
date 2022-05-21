@@ -1,7 +1,53 @@
+import { useEffect } from "react";
 import { Carousel, CarouselItem, Col, Container, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  eventsFetching,
+  eventsFetched,
+  eventsFetchingError,
+} from "../../../actions";
+import useServices from "../../../services/Services";
 import "./EventsBlock.css";
 
 function EventsBlock() {
+  const { events } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const { getEvents } = useServices();
+
+  useEffect(() => {
+    dispatch(eventsFetching());
+    getEvents()
+      .then((data) => dispatch(eventsFetched(data)))
+      .catch(() => dispatch(eventsFetchingError()));
+  }, []);
+
+  const renderEvents = (events) => {
+    return events.map((item) => {
+      return (
+        <CarouselItem key={item.id}>
+          <Row className="justify-content-center">
+            <Col lg="6">
+              <img
+                className="event-img fill-available"
+                src={item.images[0]}
+                alt="events-1"
+              />
+            </Col>
+            <Col lg="5">
+              <div className="event-info">
+                {/* <span className="price">$200</span> */}
+                <h3 className="title mb-4">{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            </Col>
+          </Row>
+        </CarouselItem>
+      );
+    });
+  };
+
+  const eventsCarousel = renderEvents(events);
+
   return (
     <div className="events-block">
       <Container>
@@ -20,7 +66,7 @@ function EventsBlock() {
           </Row>
         </div>
         <Carousel nextIcon prevIcon>
-          <CarouselItem>
+          {/* <CarouselItem>
             <Row className="justify-content-between">
               <Col lg="6">
                 <img
@@ -65,7 +111,8 @@ function EventsBlock() {
                 </div>
               </Col>
             </Row>
-          </CarouselItem>
+          </CarouselItem> */}
+          {eventsCarousel}
         </Carousel>
       </Container>
     </div>

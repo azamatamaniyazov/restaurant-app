@@ -4,8 +4,7 @@ import CategoriesPage from "./categoriesPage/CategoriesPage";
 import Navbar from "./navbar/Navbar";
 import HomePage from "./homePage/HomePage";
 import BasketPage from "./basketPage/BasketPage";
-import { useEffect, useState } from "react";
-import useServices from "../services/Services";
+import BookingPage from "./bookingPage/BookingPage";
 
 function App() {
   return (
@@ -15,6 +14,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="menu" element={<CategoriesPage />} />
           <Route path="my-menu" element={<BasketPage />} />
+          <Route path="booking" element={<BookingPage />} />
         </Route>
       </Routes>
     </div>
